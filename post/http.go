@@ -73,7 +73,6 @@ func sliceEncode(w http.ResponseWriter, p []Post) *app.Error {
 }
 
 func postIndex(w http.ResponseWriter, r *http.Request, c appengine.Context) *app.Error {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 	posts, err := All(c)
@@ -97,7 +96,6 @@ func postGet(w http.ResponseWriter, r *http.Request, c appengine.Context) *app.E
 		return &app.Error{err, "Couldn't get that post.", http.StatusInternalServerError}
 	}
 
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 	postEncode(w, *p)
@@ -105,7 +103,6 @@ func postGet(w http.ResponseWriter, r *http.Request, c appengine.Context) *app.E
 }
 
 func postCreate(w http.ResponseWriter, r *http.Request, c appengine.Context) *app.Error {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	p, err := postUnmarshal(w, r)
 	if err != nil {
@@ -121,13 +118,11 @@ func postUpdate(w http.ResponseWriter, r *http.Request, c appengine.Context) *ap
 	switch r.Method {
 	case "OPTIONS":
 		// Preflight request
-		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "PUT, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		break
 
 	case "PUT":
-		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		id, err := strconv.ParseInt(mux.Vars(r)["id"], 10, 64)
 		if err != nil {
