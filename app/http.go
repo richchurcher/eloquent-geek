@@ -27,8 +27,7 @@ func init() {
 	http.Handle("/", Router)
 }
 
-// Public wraps handlers. It will check for a session, but it does not require
-// one in order to proceed
+// Public wraps handlers.
 type Public func(http.ResponseWriter, *http.Request, appengine.Context, *sessions.Session) *Error
 
 // ServeHTTP implements interface http.Handler for the Public wrapper.
@@ -65,7 +64,7 @@ func (h Private) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // Wrap API requests
 type API func(http.ResponseWriter, *http.Request, appengine.Context) *Error
 
-// ServeHTTP implements interface http.Handler for the API wrapper.
+// No sessions, just an API wrapper
 func (h API) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	start := time.Now()
