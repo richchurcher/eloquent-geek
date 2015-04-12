@@ -1,3 +1,56 @@
 {{define "base"}}
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<title>Gargantuan</title>
+	<meta name="description" content="Gargantuan Blog: on not being massive anymore.">
+	<meta name="author" content="Rich Churcher">
+	
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="stylesheet" href="/css/base.css">
+	<link rel="stylesheet" href="/css/layout.css">
+	<link rel="stylesheet" href="/css/skeleton.css">
+	<link rel="stylesheet" href="/css/docs.css">
+	<link rel="shortcut icon" href="src/images/favicon.ico">
+	<link rel="apple-touch-icon" sizes="57x57" href="src/images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="src/images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="src/images/apple-touch-icon-114x114.png">
+</head>
+<body>
+	<div class="container">
 	{{template "content" .}}
+	<div class="three columns sidebar offset-by-one">
+		<h3 id="logo">Gargantuan</h3>
+		<div class="facebook icon" id="fbLoginButton"></div>
+	</div>
+	</div><!-- container -->
+	<div class="resize"></div>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script>
+	var fbLogin;
+	$('#fbLoginButton').click(function () {
+			var pos = screenCenterPos(800, 500);
+			fbLogin = window.open("http://www.richchurcher.com/auth/oauth2/fb", "SignIn", "width=780,height=410,toolbar=0,scrollbars=0,status=0,resizable=0,location=0,menuBar=0,left=" + pos.x + ",top=" + pos.y);
+			setTimeout(CheckLoginStatus, 2000);
+			fbLogin.focus();
+			return false;
+		});
+	function CheckLoginStatus() {
+		if (fbLogin.closed) {
+			$('#UserInfo').text($.cookie("some_cookie"));
+		}
+		else setTimeout(CheckLoginStatus, 1000);
+	}
+	</script>
+</body>
+</html>
 {{end}}
