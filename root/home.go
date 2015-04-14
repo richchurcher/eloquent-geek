@@ -2,20 +2,20 @@
 package root
 
 import (
-	"html/template"
+	//"html/template"
 	"net/http"
 
-	"appengine"
+	//"appengine"
 
 	"app"
 
-	"github.com/gorilla/sessions"
+	//"github.com/gorilla/sessions"
 )
 
 func init() {
-	app.Router.Handle("/", func(w http.ResponseWriter, r *http.Request) {
+	app.Router.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, r.URL.Path[1:])
-	})
+	}))
 	app.Router.NotFoundHandler = http.HandlerFunc(notFound)
 }
 
