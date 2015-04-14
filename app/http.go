@@ -20,7 +20,7 @@ func (e *Error) Error() string {
 	return e.E.Error()
 }
 
-var Router = mux.NewRouter().StrictSlash(true)
+var Router = mux.NewRouter()
 
 func init() {
 	http.Handle("/", Router)
