@@ -1,6 +1,6 @@
 var app = angular.module('eg', ['ngResource']);
 app.factory("Post", function($resource) {
-    return $resource("/post/");
+    return $resource("/post");
 });
 
 app.controller("PostIndexCtrl", function ($scope, Post) {

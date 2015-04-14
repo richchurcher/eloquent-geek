@@ -23,10 +23,10 @@ func init() {
 	s.Handle("/{id:[0-9]+}", app.API(postGet)).
 		Methods("GET").
 		Name("PostGet")
-	s.Handle("/update/{id:[0-9]+}", app.API(postUpdate)).
+	s.Handle("/{id:[0-9]+}", app.API(postUpdate)).
 		Methods("PUT", "OPTIONS"). // NOTE: OPTIONS crucial here, allows preflight request
 		Name("PostUpdate")
-	s.Handle("/create", app.API(postCreate)).
+	s.Handle("/", app.API(postCreate)).
 		Methods("POST").
 		Name("PostCreate")
 }
