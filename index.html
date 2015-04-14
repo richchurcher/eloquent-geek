@@ -1,21 +1,26 @@
-function Get($scope, $http) {
-    $http.get('http://eloquentgeek.com/post/').
-        success(function(data) {
-            $scope.response = data;
-        });
-}
-
-function Post($scope, $http) {
-    $http.post('http://eloquentgeek.com/post/create',
-        {
-              title: "Title",
-              body: "Body",
-              tags: ["one", "two", "three"],
-        }).
-        success(function(data) {
-            $scope.response = data;
-        }).
-        error(function(data) {
-            $scope.response = data;
-        });
-}
+<!DOCTYPE html>
+<html ng-app>
+    <head>
+        <meta charset="utf-8">
+        <title>EG</title>
+        <meta name="description" content="Eloquent Geek">
+        <meta name="author" content="Rich Churcher">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.min.js"></script>
+        <script type="text/javascript" src="blog.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="twelve columns content">
+                <div ng-controller="Get">
+                    <p>{{response}}</p>
+                </div>
+                <div ng-controller="Post">
+                    <p>{{response}}</p>
+                </div>
+            </div>
+        </div><!-- container -->
+    </body>
+</html>

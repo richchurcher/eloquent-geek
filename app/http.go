@@ -8,7 +8,6 @@ import (
 	"appengine"
 
 	"github.com/gorilla/mux"
-	"github.com/gorilla/sessions"
 )
 
 type Error struct {
@@ -25,40 +24,6 @@ var Router = mux.NewRouter()
 
 func init() {
 	http.Handle("/", Router)
-}
-
-// Public wraps handlers.
-type Public func(http.ResponseWriter, *http.Request, appengine.Context, *sessions.Session) *Error
-
-// ServeHTTP implements interface http.Handler for the Public wrapper.
-func (h Public) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
-	store := sessions.NewCookieStore([]byte("VQzwNVF6fLqiMpMQFwB19dlKh1-7_t3u_qNuyl6RpB5J5W3xJjdsk91azpqH6C13z5E-Xs9zv3DzTXjxDEJ7Jw=="))
-	s, _ := store.Get(r, "main")
-	start := time.Now()
-
-	if err := h(w, r, c, s); err != nil {
-		http.Error(w, err.Error(), err.Code)
-	}
-
-	log.Printf(
-		"%s\t%s\t%s",
-		r.Method,
-		r.RequestURI,
-		time.Since(start),
-	)
-}
-
-type Private func(http.ResponseWriter, *http.Request, appengine.Context, *sessions.Session) *Error
-
-func (h Private) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
-	store := sessions.NewCookieStore([]byte("VQzwNVF6fLqiMpMQFwB19dlKh1-7_t3u_qNuyl6RpB5J5W3xJjdsk91azpqH6C13z5E-Xs9zv3DzTXjxDEJ7Jw=="))
-	s, _ := store.Get(r, "main")
-
-	if err := h(w, r, c, s); err != nil {
-		http.Error(w, err.Error(), err.Code)
-	}
 }
 
 // Wrap API requests
