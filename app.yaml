@@ -17,9 +17,10 @@ handlers:
   static_files: images/favicon.ico
   upload: images/favicon\.ico
 
-- url: /post
-  script: _go_app
-
-- url: /.*
+- url: /
   static_files: index.html
   upload: index.html
+
+- url: /.*
+  script: _go_app
+
