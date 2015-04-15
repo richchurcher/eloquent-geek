@@ -16,12 +16,12 @@ postAPI.controller("PostIndexCtrl", ["$scope", "Post",
     }
 ]);
 
-postAPI.controller("CreateCtrl", ["$scope", "Post",
-    function($scope, Post) {
-        Post.save({
-            title: "Title",
-            body: "Body",
-            tags: ["one", "two", "three"],
-        });
-    }
-]);
+//postAPI.controller("CreateCtrl", ["$scope", "Post",
+    //function($scope, Post) {
+        //Post.save({
+            //title: "Title",
+            //body: "Body",
+            //tags: ["one", "two", "three"],
+        //});
+    //}
+//]);
