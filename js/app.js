@@ -1,19 +1,27 @@
-var app = angular.module('eg', ['ngResource']);
-app.factory("Post", function($resource) {
-    return $resource("/post");
-});
+var app = angular.module("eg", ["ngResource", "postAPI"]);
 
-app.controller("PostIndexCtrl", function ($scope, Post) {
-    Post.query(function(data) {
-        $scope.response = data;
-    });
-});
+var postAPI = angular.module("postAPI", ["ngResource"]);
 
-app.controller("CreateCtrl", function ($scope, Post) {
-    Post.save({
-        title: "Title",
-        body: "Body",
-        tags: ["one", "two", "three"],
-    });
-});
+postAPI.factory("Post", ["$resource", 
+    function ($resource) {
+        return $resource("/post", {}, {});
+    }
+]);
 
+postAPI.controller("PostIndexCtrl", ["$scope", "Post",
+    function($scope, Post) {
+        Post.query(function(data) {
+            $scope.response = data;
+        });
+    }
+]);
+
+postAPI.controller("CreateCtrl", ["$scope", "Post",
+    function($scope, Post) {
+        Post.save({
+            title: "Title",
+            body: "Body",
+            tags: ["one", "two", "three"],
+        });
+    }
+]);

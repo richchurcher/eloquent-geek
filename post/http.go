@@ -16,7 +16,7 @@ import (
 )
 
 func init() {
-	s := app.Router.PathPrefix("/post/").Subrouter().StrictSlash(true)
+	s := app.Router.PathPrefix("/post").Subrouter().StrictSlash(true)
 	s.Handle("/", app.API(postIndex)).
 		Methods("GET").
 		Name("PostIndex")
