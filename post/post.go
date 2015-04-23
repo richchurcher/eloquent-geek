@@ -14,7 +14,7 @@ type Post struct {
 	Tags     []string  `json:"tags"`
 	Created  time.Time `json:"created"`
 	Modified time.Time `json:"modified"`
-	Number   int64     `json:"number" datastore:"-"` // present in JSON response, absent in datastore
+	ID       int64     `json:"id" datastore:"-"` // present in JSON response, absent in datastore
 	key      *datastore.Key
 }
 
@@ -33,14 +33,14 @@ func (p *Post) Save(c appengine.Context) error {
 	return nil
 }
 
-func (p *Post) ID() int64 {
+func (p *Post) GetID() int64 {
 	if p.key == nil {
 		return 0
 	}
 	return p.key.IntID()
 }
 
-func GetByNumber(c appengine.Context, id int64) (*Post, error) {
+func GetByID(c appengine.Context, id int64) (*Post, error) {
 	k := datastore.NewKey(c, "Post", "", id, nil)
 	p := new(Post)
 	if err := datastore.Get(c, k, p); err != nil {
@@ -61,6 +61,14 @@ func All(c appengine.Context) (*[]Post, error) {
 		p[i].key = k[i]
 	}
 	return &p, nil
+}
+
+func Delete(c appengine.Context, id int64) error {
+	k := datastore.NewKey(c, "Post", "", id, nil)
+	if err := datastore.Delete(c, k); err != nil {
+		return err
+	}
+	return nil
 }
 
 func TrustedHTML(b []byte) template.HTML {

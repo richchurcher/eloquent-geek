@@ -29,6 +29,9 @@ func init() {
 	s.Handle("/", app.API(postCreate)).
 		Methods("POST").
 		Name("PostCreate")
+	s.Handle("/{id:[0-9]+}", app.API(postDelete)).
+		Methods("DELETE").
+		Name("PostDelete")
 }
 
 func postUnmarshal(w http.ResponseWriter, r *http.Request) (*Post, error) {
@@ -53,7 +56,7 @@ func postUnmarshal(w http.ResponseWriter, r *http.Request) (*Post, error) {
 // Add an ID field for export to JSON
 func postEncode(w http.ResponseWriter, p Post) *app.Error {
 	// Add exported ID field for JSON response
-	p.Number = p.ID()
+	p.ID = p.GetID()
 
 	if err := json.NewEncoder(w).Encode(p); err != nil {
 		return &app.Error{err, "Couldn't encode JSON.", http.StatusInternalServerError}
@@ -63,7 +66,7 @@ func postEncode(w http.ResponseWriter, p Post) *app.Error {
 
 func sliceEncode(w http.ResponseWriter, p []Post) *app.Error {
 	for i, _ := range p {
-		p[i].Number = p[i].ID()
+		p[i].ID = p[i].GetID()
 	}
 
 	if err := json.NewEncoder(w).Encode(p); err != nil {
@@ -91,7 +94,7 @@ func postGet(w http.ResponseWriter, r *http.Request, c appengine.Context) *app.E
 		// be directed to the NotFoundHandler by mux)
 		return &app.Error{err, "Can't find that. Try again?", http.StatusInternalServerError}
 	}
-	p, err := GetByNumber(c, id)
+	p, err := GetByID(c, id)
 	if err != nil {
 		return &app.Error{err, "Couldn't get that post.", http.StatusInternalServerError}
 	}
@@ -144,5 +147,21 @@ func postUpdate(w http.ResponseWriter, r *http.Request, c appengine.Context) *ap
 		break
 	}
 
+	return nil
+}
+
+func postDelete(w http.ResponseWriter, r *http.Request, c appengine.Context) *app.Error {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	id, err := strconv.ParseInt(mux.Vars(r)["id"], 10, 64)
+	if err != nil {
+		// Malformed URL. Most requests should never reach this point.
+		return &app.Error{err, "Malformed URL.", http.StatusInternalServerError}
+	}
+
+	if err := Delete(c, id); err != nil {
+		return &app.Error{err, "Unable to delete post.", http.StatusInternalServerError}
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 	return nil
 }
