@@ -31,13 +31,15 @@ postAPI.controller("PostIndexCtrl", ["$scope", "Post",
 
 postAPI.controller("CreateCtrl", ["$scope", "Post",
   function($scope, Post) {
-    Post.save({
-      title: "Title",
-      body: "Body",
-      tags: ["one", "two", "three"],
-    }, function (response) {
-      $scope.response = "API POST response: " + angular.toJson(response);
-    });
+    $scope.createPost = function(post) {
+      Post.save({
+        title: post.title,
+        body: post.body,
+        tags: post.tags.split(" "),
+      }, function (response) {
+        $scope.response = "API POST response: " + angular.toJson(response);
+      });
+    };
   }
 ]);
 
