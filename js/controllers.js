@@ -1,55 +1,62 @@
-var app = angular.module("eg", ["ngResource", "postAPI"]);
+angular
 
-app.config(['$resourceProvider', function($resourceProvider) {
-  $resourceProvider.defaults.stripTrailingSlashes = false;
-}]);
+  .module("postAPI", [
+    "ngResource"
+  ])
 
-var postAPI = angular.module("postAPI", ["ngResource"]);
+  .controller("PostCtrl", [
+    "$scope", 
+    "Post",
+    PostCtrl
+  ])
 
-postAPI.factory("Post", ["$resource", 
-  function postFactory(resource) {
-    return resource("/post/:postId");
-  }
-]);
+  .directive("postList", postList)
 
-postAPI.controller("PostCtrl", ["$scope", "Post",
-  function($scope, Post) {
-    $scope.loadPosts = function() {
-      Post.query(function (data) {
-        $scope.posts = data;
-      });
-    };
-    
-    $scope.deletePost = function(id, i) {
-      Post.delete({
-        postId: id,
-      }).$promise.then(function () {
-          $scope.posts.splice(i, 1);
-      }, function (error) {
-          // TODO: handle error
-      });
-    };
+  .factory("Post", [
+    "$resource", 
+    postFactory
+  ])
 
-    $scope.createPost = function(post) {
-      if (!post.tags) post.tags = "";
-      Post.save({
-        title: post.title,
-        body: post.body,
-        tags: post.tags.split(" "),
-      }, function (response) {
-        $scope.posts.push(response);
-      });
-    };
-  }
-])
-
-postAPI.directive("postList", function () {
+function postList() {
   return {
-    controller: postAPI.PostCtrl,
+    controller: PostCtrl,
     link: function ($scope, elt, attrs) {
       if (!$scope.posts) {
         $scope.loadPosts();
       }
     },
   }
-});
+}
+
+function postFactory(resource) {
+  return resource("/post/:postId");
+}
+
+function PostCtrl($scope, Post) {
+  $scope.loadPosts = function() {
+    Post.query(function (data) {
+      $scope.posts = data;
+    });
+  };
+  
+  $scope.deletePost = function(id, i) {
+    Post.delete({
+      postId: id,
+    }).$promise.then(function () {
+        $scope.posts.splice(i, 1);
+    }, function (error) {
+        // TODO: handle error
+    });
+  };
+
+  $scope.createPost = function(post) {
+    if (!post.tags) post.tags = "";
+    Post.save({
+      title: post.title,
+      body: post.body,
+      tags: post.tags.split(" "),
+    }, function (response) {
+      $scope.posts.push(response);
+    });
+  };
+}
