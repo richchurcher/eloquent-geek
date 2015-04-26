@@ -1,47 +1,49 @@
 <!DOCTYPE html>
 <html ng-app="eg">
-    <head>
-        <meta charset="utf-8">
-        <title>EG</title>
-        <meta name="description" content="Eloquent Geek">
-        <meta name="author" content="Rich Churcher">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
-        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
-        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.min.js"></script>
-        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-resource.min.js"></script>
-        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-route.js"></script>
-        <script type="text/javascript" src="js/controllers.js"></script>
-    </head>
-    <body>
-        <div class="container">
-            <div class="twelve columns content">
-                <div ng-controller="PostIndexCtrl">
-                  <div ng-repeat="post in posts">
-                    <div class="post">
-                      <strong>{{post.id}}</strong>
-                      <em>{{deleteResponse}}</em>
-                      <button remove-button ng-click="deletePost(post.id);remove()">Delete</button>
-                    </div>
-                  </div>
-                </div>
-                <div ng-controller="CreateCtrl">
-                  <form name="create" ng-controller="CreateCtrl" class="create">
-                    <label for="title">Title</label>
-                    <span class="error" ng-show="create.title.$error.required">REQUIRED</span><br>
-                    <input name="title" ng-model="post.title" required>
+  <head>
+    <meta charset="utf-8">
+    <title>EG</title>
+    <meta name="description" content="Eloquent Geek">
+    <meta name="author" content="Rich Churcher">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.js"></script>
+    <!--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.min.js"></script>-->
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-resource.js"></script>
+    <!--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-resource.min.js"></script>-->
+    <script type="text/javascript" src="js/controllers.js"></script>
+  </head>
 
-                    <label for="body">Body</label>
-                    <span class="error" ng-show="create.body.$error.required">REQUIRED</span><br>
-                    <textarea name="body" ng-model="post.body" required></textarea>
+  <body>
+  <div class="container">
+  <div class="twelve columns content">
+    <div ng-controller="PostCtrl">
+    <post-list>
+      <div ng-repeat="post in posts">
+        <div class="post">
+          <strong>{{post.id}}</strong>
+          <button ng-click="deletePost(post.id)">Delete</button>
+        </div>
+      </div>
+    </post-list>
 
-                    <label for="tags">Tags</label>
-                    <input name="tags" ng-model="post.tags"><br>
+    <form name="create" class="create">
+      <label for="title">Title</label>
+      <span class="error" ng-show="create.title.$error.required">REQUIRED</span><br>
+      <input name="title" ng-model="post.title" required>
 
-                    <button create-button ng-click="createPost(post);reloadPosts()">Create</button>
-                  </form>
-                </div>
-            </div>
-        </div><!-- container -->
-    </body>
+      <label for="body">Body</label>
+      <span class="error" ng-show="create.body.$error.required">REQUIRED</span><br>
+      <textarea name="body" ng-model="post.body" required></textarea>
+
+      <label for="tags">Tags</label>
+      <input name="tags" ng-model="post.tags"><br>
+
+      <button create-form ng-click="createPost(post)">Create</button>
+    </form>
+    </div>
+  </div>
+  </div>
+  </body>
 </html>

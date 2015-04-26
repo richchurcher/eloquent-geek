@@ -1,7 +1,6 @@
 var app = angular.module("eg", ["ngResource", "postAPI"]);
 
 app.config(['$resourceProvider', function($resourceProvider) {
-  // Don't strip trailing slashes from calculated URLs
   $resourceProvider.defaults.stripTrailingSlashes = false;
 }]);
 
@@ -13,44 +12,47 @@ postAPI.factory("Post", ["$resource",
   }
 ]);
 
-postAPI.controller("PostIndexCtrl", ["$scope", "Post",
+postAPI.controller("PostCtrl", ["$scope", "Post",
   function($scope, Post) {
-    Post.query(function(data) {
-      $scope.posts = data;
-    });
-
+    $scope.loadPosts = function() {
+      Post.query(function (data) {
+        $scope.posts = data;
+      });
+    };
+    
     $scope.deletePost = function(id) {
       Post.delete({
         postId: id,
-      }), function (response) {
-        $scope.deleteResponse = "API DELETE response: " + angular.toJson(response);
-      }
+      }).$promise.then(function () {
+        var i = $scope.posts.length;
+        while (i--) {
+          if ($scope.posts[i].id == id) {
+            $scope.posts.splice(i, 1);
+          }
+        }
+      });
     };
-  }
-]);
 
-postAPI.controller("CreateCtrl", ["$scope", "Post",
-  function($scope, Post) {
     $scope.createPost = function(post) {
+      if (!post.tags) post.tags = "";
       Post.save({
         title: post.title,
         body: post.body,
         tags: post.tags.split(" "),
       }, function (response) {
-        $scope.response = "API POST response: " + angular.toJson(response);
+        $scope.posts.push(response);
       });
     };
   }
-]);
+])
 
-postAPI.directive("removeButton",
-  function () {
-    return {
-      link: function ($scope, elt, attrs) {
-        $scope.remove = function() {
-          elt.parent().remove();
-        };
+postAPI.directive("postList", function () {
+  return {
+    controller: postAPI.PostCtrl,
+    link: function ($scope, elt, attrs) {
+      if (!$scope.posts) {
+        $scope.loadPosts();
       }
-    }
+    },
   }
-);
+});
