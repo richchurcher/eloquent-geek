@@ -12,6 +12,7 @@ type Post struct {
 	Title    string    `json:"title"`
 	Body     string    `json:"body" datastore:",noindex"`
 	Tags     []string  `json:"tags"`
+	Style    string    `json:"style"`
 	Created  time.Time `json:"created"`
 	Modified time.Time `json:"modified"`
 	ID       int64     `json:"id" datastore:"-"` // present in JSON response, absent in datastore

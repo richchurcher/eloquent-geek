@@ -20,16 +20,13 @@ postAPI.controller("PostCtrl", ["$scope", "Post",
       });
     };
     
-    $scope.deletePost = function(id) {
+    $scope.deletePost = function(id, i) {
       Post.delete({
         postId: id,
       }).$promise.then(function () {
-        var i = $scope.posts.length;
-        while (i--) {
-          if ($scope.posts[i].id == id) {
-            $scope.posts.splice(i, 1);
-          }
-        }
+          $scope.posts.splice(i, 1);
+      }, function (error) {
+          // TODO: handle error
       });
     };
 
