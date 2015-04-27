@@ -1,8 +1,6 @@
 angular
 
-  .module("postAPI", [
-    "ngResource"
-  ])
+  .module("post")
 
   .controller("PostCtrl", [
     "$scope", 

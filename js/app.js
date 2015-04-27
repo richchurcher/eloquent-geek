@@ -1,7 +1,7 @@
 angular
 
   .module("eg", [
-    "postAPI"
+    "post"
   ])
 
   .config([
