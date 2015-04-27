@@ -1,6 +1,7 @@
 <div ng-repeat="post in posts">
   <div class="post">
-    <strong>{{post.id}}</strong>
+    <strong>{{post.title}}</strong><br>
+    <em ng-repeat="tag in post.tags">{{tag}} </em>
     <button ng-click="deletePost(post.id, $index)">Delete</button>
   </div>
 </div>
