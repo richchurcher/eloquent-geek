@@ -18,6 +18,7 @@ angular
 function postList() {
   return {
     controller: PostCtrl,
+    templateUrl: "/js/post/postList.html",
     link: function ($scope, elt, attrs) {
       if (!$scope.posts) {
         $scope.loadPosts();
