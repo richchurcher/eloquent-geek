@@ -11,7 +11,6 @@
     "karma-junit-reporter": "^0.2.2"
   },
   "scripts": {
-    "pretest": "npm install",
     "test": "karma start karma.conf.js",
     "test-single-run": "karma start karma.conf.js  --single-run"
   }
