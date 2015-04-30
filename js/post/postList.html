@@ -2,6 +2,6 @@
   <div class="post">
     <strong>{{post.title}}</strong><br>
     <em ng-repeat="tag in post.tags">{{tag}} </em>
-    <button ng-click="deletePost(post.id, $index)">Delete</button>
+    <button class="deletePost" ng-click="deletePost(post.id, $index)">Delete</button>
   </div>
 </div>

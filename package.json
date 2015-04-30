@@ -1,0 +1,18 @@
+{
+  "name": "eloquent-geek",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Stylesheet morphin' blog",
+  "repository": "https://github.com/richchurcher/eloquent-geek",
+  "license": "",
+  "devDependencies": {
+    "karma": "~0.10",
+    "http-server": "^0.6.1",
+    "karma-junit-reporter": "^0.2.2"
+  },
+  "scripts": {
+    "pretest": "npm install",
+    "test": "karma start karma.conf.js",
+    "test-single-run": "karma start karma.conf.js  --single-run"
+  }
+}
