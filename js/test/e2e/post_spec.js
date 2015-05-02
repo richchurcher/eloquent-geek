@@ -20,13 +20,13 @@ describe('Eloquent Geek', function() {
 
     it('should create posts using the form',
        function() {
-         for (var i = 0; i < 10; i++) {
+         for (var i = 0; i < 20; i++) {
            element(by.model('post.title')).clear().sendKeys('Protractor');
            element(by.model('post.body')).clear().sendKeys('Test');
            element(by.model('post.tags')).clear().sendKeys('tag1 tag2 tag3\n');
          }
          var postList = element.all(by.repeater('post in posts'));
-         expect(postList.count()).toBe(10);
+         expect(postList.count()).toBe(20);
        }
     );
   });

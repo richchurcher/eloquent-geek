@@ -11,19 +11,33 @@ describe('PostCtrl', function() {
       expect(scope.createPost).toBeDefined();
     })
   );
-});
 
-//describe('PostCtrl', function() {
-  //beforeEach(module('post'));
+  //it("should equal 5",  inject(function(myservice, $timeout) {
 
-  //it("should populate 'posts' with posts",
-     //inject(function($controller) {
-       //var scope = {};
-       //var ctrl = $controller('PostCtrl', {$scope:scope});
+      //var valueToVerify;
+      //myservice.DoIt().then(function(returned) {
+        //valueToVerify = returned;  
+      //});  
+      //$timeout.flush();        
+      //expect(valueToVerify).toEqual(5);
+  //}));
+
+  it("should create a post",
+     inject(function($controller) {
+
+       //var actual;
+       var scope = {};
+       var ctrl = $controller('PostCtrl', {$scope:scope});
+       scope.loadPosts();
+       
 
        //scope.createPost({title:"foo", body: "bar", tags: "wombat"});
-       //scope.loadPosts();
-       //expect(scope.posts).toBe(1);
-    //})
-  //);
-//});
+       //scope.loadPosts().then(function(returned) {
+         //actual = returned;
+       //});
+
+       //expect(actual).toBeDefined();
+    })
+  );
+});
+

@@ -1,4 +1,4 @@
-package post
+2ackage post
 
 import (
 	"encoding/json"
