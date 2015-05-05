@@ -1,7 +1,8 @@
 angular
 
   .module("eg", [
-    "post"
+    "post",
+    "style"
   ])
 
   .config([

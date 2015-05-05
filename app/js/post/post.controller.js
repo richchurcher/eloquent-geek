@@ -15,6 +15,12 @@ angular
     postFactory
   ])
 
+  .filter("nlToArray", function() {
+    return function (body) {
+      return body.split('\n');
+    };
+  });
+
 function postList() {
   return {
     controller: PostCtrl,

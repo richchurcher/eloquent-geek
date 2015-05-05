@@ -1,4 +1,4 @@
-2ackage post
+package post
 
 import (
 	"encoding/json"
@@ -10,93 +10,73 @@ import (
 	"appengine"
 	"appengine/datastore"
 
-	"app"
-
 	"github.com/gorilla/mux"
+	"github.com/richchurcher/eloquent-geek/egerror"
 )
-
-func init() {
-	s := app.Router.PathPrefix("/post").Subrouter().StrictSlash(true)
-	s.Handle("/", app.API(postIndex)).
-		Methods("GET").
-		Name("PostIndex")
-	s.Handle("/{id:[0-9]+}", app.API(postGet)).
-		Methods("GET").
-		Name("PostGet")
-	s.Handle("/{id:[0-9]+}", app.API(postUpdate)).
-		Methods("PUT", "OPTIONS"). // NOTE: OPTIONS crucial here, allows preflight request
-		Name("PostUpdate")
-	s.Handle("/", app.API(postCreate)).
-		Methods("POST").
-		Name("PostCreate")
-	s.Handle("/{id:[0-9]+}", app.API(postDelete)).
-		Methods("DELETE").
-		Name("PostDelete")
-}
 
 func postUnmarshal(w http.ResponseWriter, r *http.Request) (*Post, error) {
 	var p Post
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1049576))
 	if err != nil {
-		return nil, &app.Error{err, "Couldn't read request body.", http.StatusInternalServerError}
+		return nil, &egerror.Error{err, "Couldn't read request body.", http.StatusInternalServerError}
 	}
 	if err := r.Body.Close(); err != nil {
-		return nil, &app.Error{err, "Couldn't close request body.", http.StatusInternalServerError}
+		return nil, &egerror.Error{err, "Couldn't close request body.", http.StatusInternalServerError}
 	}
 	if err := json.Unmarshal(body, &p); err != nil {
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(422) // unprocessable entity
 		if err := json.NewEncoder(w).Encode(err); err != nil {
-			return nil, &app.Error{err, "Couldn't encode error message.", http.StatusInternalServerError}
+			return nil, &egerror.Error{err, "Couldn't encode error message.", http.StatusInternalServerError}
 		}
 	}
 	return &p, nil
 }
 
 // Add an ID field for export to JSON
-func postEncode(w http.ResponseWriter, p Post) *app.Error {
+func postEncode(w http.ResponseWriter, p Post) *egerror.Error {
 	// Add exported ID field for JSON response
 	p.ID = p.GetID()
 
 	if err := json.NewEncoder(w).Encode(p); err != nil {
-		return &app.Error{err, "Couldn't encode JSON.", http.StatusInternalServerError}
+		return &egerror.Error{err, "Couldn't encode JSON.", http.StatusInternalServerError}
 	}
 	return nil
 }
 
-func sliceEncode(w http.ResponseWriter, p []Post) *app.Error {
+func sliceEncode(w http.ResponseWriter, p []Post) *egerror.Error {
 	for i, _ := range p {
 		p[i].ID = p[i].GetID()
 	}
 
 	if err := json.NewEncoder(w).Encode(p); err != nil {
-		return &app.Error{err, "Couldn't encode JSON.", http.StatusInternalServerError}
+		return &egerror.Error{err, "Couldn't encode JSON.", http.StatusInternalServerError}
 	}
 	return nil
 }
 
-func postIndex(w http.ResponseWriter, r *http.Request, c appengine.Context) *app.Error {
+func PostIndex(w http.ResponseWriter, r *http.Request, c appengine.Context) *egerror.Error {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 	posts, err := All(c)
 	if err != nil {
-		return &app.Error{err, "Couldn't get posts.", http.StatusInternalServerError}
+		return &egerror.Error{err, "Couldn't get posts.", http.StatusInternalServerError}
 	}
 
 	sliceEncode(w, *posts)
 	return nil
 }
 
-func postGet(w http.ResponseWriter, r *http.Request, c appengine.Context) *app.Error {
+func PostGet(w http.ResponseWriter, r *http.Request, c appengine.Context) *egerror.Error {
 	id, err := strconv.ParseInt(mux.Vars(r)["id"], 10, 64)
 	if err != nil {
 		// Malformed URL. Most requests should never reach this point (they will
 		// be directed to the NotFoundHandler by mux)
-		return &app.Error{err, "Can't find that. Try again?", http.StatusInternalServerError}
+		return &egerror.Error{err, "Can't find that. Try again?", http.StatusInternalServerError}
 	}
 	p, err := GetByID(c, id)
 	if err != nil {
-		return &app.Error{err, "Couldn't get that post.", http.StatusInternalServerError}
+		return &egerror.Error{err, "Couldn't get that post.", http.StatusInternalServerError}
 	}
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -105,11 +85,11 @@ func postGet(w http.ResponseWriter, r *http.Request, c appengine.Context) *app.E
 	return nil
 }
 
-func postCreate(w http.ResponseWriter, r *http.Request, c appengine.Context) *app.Error {
+func PostCreate(w http.ResponseWriter, r *http.Request, c appengine.Context) *egerror.Error {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	p, err := postUnmarshal(w, r)
 	if err != nil {
-		return err.(*app.Error)
+		return err.(*egerror.Error)
 	}
 	p.Save(c)
 	w.WriteHeader(http.StatusCreated)
@@ -117,7 +97,7 @@ func postCreate(w http.ResponseWriter, r *http.Request, c appengine.Context) *ap
 	return nil
 }
 
-func postUpdate(w http.ResponseWriter, r *http.Request, c appengine.Context) *app.Error {
+func PostUpdate(w http.ResponseWriter, r *http.Request, c appengine.Context) *egerror.Error {
 	switch r.Method {
 	case "OPTIONS":
 		// Preflight request
@@ -130,16 +110,16 @@ func postUpdate(w http.ResponseWriter, r *http.Request, c appengine.Context) *ap
 		id, err := strconv.ParseInt(mux.Vars(r)["id"], 10, 64)
 		if err != nil {
 			// Malformed URL. Most requests should never reach this point.
-			return &app.Error{err, "Malformed URL.", http.StatusInternalServerError}
+			return &egerror.Error{err, "Malformed URL.", http.StatusInternalServerError}
 		}
 
 		p, err := postUnmarshal(w, r)
 		if err != nil {
-			return err.(*app.Error)
+			return err.(*egerror.Error)
 		}
 		p.key = datastore.NewKey(c, "Post", "", id, nil)
 		if err := p.Save(c); err != nil {
-			return &app.Error{err, "Unable to save post.", http.StatusInternalServerError}
+			return &egerror.Error{err, "Unable to save post.", http.StatusInternalServerError}
 		}
 
 		w.WriteHeader(http.StatusOK)
@@ -150,16 +130,16 @@ func postUpdate(w http.ResponseWriter, r *http.Request, c appengine.Context) *ap
 	return nil
 }
 
-func postDelete(w http.ResponseWriter, r *http.Request, c appengine.Context) *app.Error {
+func PostDelete(w http.ResponseWriter, r *http.Request, c appengine.Context) *egerror.Error {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	id, err := strconv.ParseInt(mux.Vars(r)["id"], 10, 64)
 	if err != nil {
 		// Malformed URL. Most requests should never reach this point.
-		return &app.Error{err, "Malformed URL.", http.StatusInternalServerError}
+		return &egerror.Error{err, "Malformed URL.", http.StatusInternalServerError}
 	}
 
 	if err := Delete(c, id); err != nil {
-		return &app.Error{err, "Unable to delete post.", http.StatusInternalServerError}
+		return &egerror.Error{err, "Unable to delete post.", http.StatusInternalServerError}
 	}
 
 	w.WriteHeader(http.StatusNoContent)

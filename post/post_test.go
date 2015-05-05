@@ -8,6 +8,7 @@ import (
 	"appengine/datastore"
 )
 
+// A completely pointless test... that works!!!!!
 func TestSavePost(t *testing.T) {
 	// Arrange
 	c, err := aetest.NewContext(nil)
@@ -16,20 +17,23 @@ func TestSavePost(t *testing.T) {
 	}
 	defer c.Close()
 
-	key := datastore.NewIncompleteKey(c, "Post", nil)
 	p := Post{
-		"Title",
-		"Body",
-		[]string{"tagone", "tagtwo", "tagthree"},
-		"",
+		Title: "Title",
+		Body:  "Body",
+		Tags:  []string{"tagone", "tagtwo", "tagthree"},
+		Style: "",
 	}
 
 	// Act
 	p.Save(c)
+	id := p.GetID()
+	k := datastore.NewKey(c, "Post", "", id, nil)
+	expected := new(Post)
+	datastore.Get(c, k, expected)
+	expected.key = k
 
 	// Assert
-	if actual := GetByID(c, key.IntID()); !reflect.DeepEqual(actual, expected) {
+	if actual, _ := GetByID(c, k.IntID()); !reflect.DeepEqual(actual, expected) {
 		t.Errorf("composeMessage() = %+v, expected %+v", actual, expected)
 	}
-
 }

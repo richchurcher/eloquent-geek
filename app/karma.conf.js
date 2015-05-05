@@ -4,10 +4,10 @@ module.exports = function(config){
     basePath : './',
 
     files : [
-      '../src/js/angular.js',
-      '../src/js/angular-route.js',
-      '../src/js/angular-resource.js',
-      '../src/js/angular-mocks.js',
+      '/media/work/src/js/angular.js',
+      '/media/work/src/js/angular-route.js',
+      '/media/work/src/js/angular-resource.js',
+      '/media/work/src/js/angular-mocks.js',
       'js/app.js',
       'js/post/post.js',
       'js/post/post.controller.js',
