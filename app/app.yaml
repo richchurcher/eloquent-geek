@@ -6,6 +6,7 @@ api_version: go1
 handlers:
 - url: /css
   static_dir: css
+  application_readable: true
 
 - url: /js
   static_dir: js
