@@ -2,6 +2,7 @@ package post
 
 import (
 	"html/template"
+	"io/ioutil"
 	"time"
 
 	"appengine"
@@ -24,8 +25,20 @@ func (p *Post) Save(c appengine.Context) error {
 		// New post, was not retrieved from datastore
 		p.key = datastore.NewIncompleteKey(c, "Post", nil)
 		p.Created = time.Now()
+
+		// Bind to stylesheet
+		css, err := ioutil.ReadFile("/css/layout.css")
+		if err != nil {
+			return err
+		}
+		p.Style = "layout-" + p.Created.String()
+		err = ioutil.WriteFile("/css/"+p.Style, css, 0644)
+		if err != nil {
+			return err
+		}
 	}
 	p.Modified = time.Now()
+
 	k, err := datastore.Put(c, p.key, p)
 	if err != nil {
 		return err
