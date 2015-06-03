@@ -1,7 +1,11 @@
 package app
 
-import "github.com/richchurcher/eloquent-geek/route"
+import (
+	"net/http"
+
+	"github.com/richchurcher/eloquent-geek/route"
+)
 
 func init() {
-	ittp.Handle("/", route.Router)
+	http.Handle("/", route.Router)
 }

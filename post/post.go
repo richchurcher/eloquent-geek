@@ -61,6 +61,11 @@ func All(c appengine.Context) (*[]Post, error) {
 	for i := 0; i < len(p); i++ {
 		p[i].key = k[i]
 	}
+
+	// Always return at least an empty slice
+	if p == nil {
+		p = []Post{}
+	}
 	return &p, nil
 }
 
