@@ -11,7 +11,7 @@ module.exports = function(config){
       'js/app.js',
       'js/post/post.js',
       'js/post/post.controller.js',
-      'js/test/post.tests.js',
+      'js/test/*_tests.js',
     ],
 
     autoWatch : true,

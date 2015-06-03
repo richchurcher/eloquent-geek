@@ -34,14 +34,16 @@ func init() {
 }
 
 // Wrap API requests
-type API func(http.ResponseWriter, *http.Request, appengine.Context) *egerror.Error
+type API func(http.ResponseWriter, *http.Request, appengine.Context, string) *egerror.Error
 
 // No sessions, just an API wrapper
 func (h API) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	start := time.Now()
 
-	if err := h(w, r, c); err != nil {
+	// Those handlers that don't need the id can simply ignore it...
+	// having it passed in here makes for slightly easier testing.
+	if err := h(w, r, c, mux.Vars(r)["id"]); err != nil {
 		http.Error(w, err.Error(), err.Code)
 	}
 

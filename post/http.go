@@ -10,7 +10,6 @@ import (
 	"appengine"
 	"appengine/datastore"
 
-	"github.com/gorilla/mux"
 	"github.com/richchurcher/eloquent-geek/egerror"
 )
 
@@ -55,7 +54,7 @@ func sliceEncode(w http.ResponseWriter, p []Post) *egerror.Error {
 	return nil
 }
 
-func PostIndex(w http.ResponseWriter, r *http.Request, c appengine.Context) *egerror.Error {
+func PostIndex(w http.ResponseWriter, r *http.Request, c appengine.Context, _ string) *egerror.Error {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 	posts, err := All(c)
@@ -67,8 +66,8 @@ func PostIndex(w http.ResponseWriter, r *http.Request, c appengine.Context) *ege
 	return nil
 }
 
-func PostGet(w http.ResponseWriter, r *http.Request, c appengine.Context) *egerror.Error {
-	id, err := strconv.ParseInt(mux.Vars(r)["id"], 10, 64)
+func PostGet(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId string) *egerror.Error {
+	id, err := strconv.ParseInt(urlId, 10, 64)
 	if err != nil {
 		// Malformed URL. Most requests should never reach this point (they will
 		// be directed to the NotFoundHandler by mux)
@@ -85,7 +84,7 @@ func PostGet(w http.ResponseWriter, r *http.Request, c appengine.Context) *egerr
 	return nil
 }
 
-func PostCreate(w http.ResponseWriter, r *http.Request, c appengine.Context) *egerror.Error {
+func PostCreate(w http.ResponseWriter, r *http.Request, c appengine.Context, _ string) *egerror.Error {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	p, err := postUnmarshal(w, r)
 	if err != nil {
@@ -97,7 +96,7 @@ func PostCreate(w http.ResponseWriter, r *http.Request, c appengine.Context) *eg
 	return nil
 }
 
-func PostUpdate(w http.ResponseWriter, r *http.Request, c appengine.Context) *egerror.Error {
+func PostUpdate(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId string) *egerror.Error {
 	switch r.Method {
 	case "OPTIONS":
 		// Preflight request
@@ -107,7 +106,7 @@ func PostUpdate(w http.ResponseWriter, r *http.Request, c appengine.Context) *eg
 
 	case "PUT":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		id, err := strconv.ParseInt(mux.Vars(r)["id"], 10, 64)
+		id, err := strconv.ParseInt(urlId, 10, 64)
 		if err != nil {
 			// Malformed URL. Most requests should never reach this point.
 			return &egerror.Error{err, "Malformed URL.", http.StatusInternalServerError}
@@ -130,9 +129,9 @@ func PostUpdate(w http.ResponseWriter, r *http.Request, c appengine.Context) *eg
 	return nil
 }
 
-func PostDelete(w http.ResponseWriter, r *http.Request, c appengine.Context) *egerror.Error {
+func PostDelete(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId string) *egerror.Error {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	id, err := strconv.ParseInt(mux.Vars(r)["id"], 10, 64)
+	id, err := strconv.ParseInt(urlId, 10, 64)
 	if err != nil {
 		// Malformed URL. Most requests should never reach this point.
 		return &egerror.Error{err, "Malformed URL.", http.StatusInternalServerError}
