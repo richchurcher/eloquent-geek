@@ -39,13 +39,13 @@ function postFactory(resource) {
 
 function PostCtrl($scope, Post) {
   $scope.loadPosts = function() {
-    Post.query(function (data) {
+    return Post.query(function (data) {
       $scope.posts = data;
     });
   };
   
   $scope.deletePost = function(id, i) {
-    Post.delete({
+    return Post.delete({
       postId: id,
     }).$promise.then(function () {
         $scope.posts.splice(i, 1);
@@ -56,7 +56,7 @@ function PostCtrl($scope, Post) {
 
   $scope.createPost = function(post) {
     if (!post.tags) post.tags = "";
-    Post.save({
+    return Post.save({
       title: post.title,
       body: post.body,
       tags: post.tags.split(" "),
