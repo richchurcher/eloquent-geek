@@ -1,6 +1,6 @@
 angular
 
-  .module("post", [
-    "ngResource"
+  .module('post', [
+    'ngResource'
   ]);
 

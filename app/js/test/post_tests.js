@@ -1,33 +1,18 @@
-describe('PostCtrl', function() {
+describe('postCtrl function', function() {
   
-  var mockPostResource, $httpBackend;
-  beforeEach(angular.mock.module('post'));
+  describe('postCtrl', function() {
+    var $scope;
 
-  beforeEach(function() {
-    angular.mock.inject(function ($injector) {
-      $httpBackend = $injector.get('$httpBackend');
-      mockPostResource = $injector.get('Post');
-    })
-  });
+    beforeEach(module('post'));
 
-  describe('createPost', function () {
-    
-    it('should create a post', 
-      inject(function (Post) {
-        $httpBackend.expectPOST('/post/')
-          .respond({
-            id: 1,
-            title: 'test title',
-            body: 'test body',
-            tags: ['tag1', 'tag2', 'tag3'],
-            style: 'body{background-color:#cccccc'
-          });
+    beforeEach(inject(function($rootScope, $controller) {
+      $scope = $rootScope.$new();
+      $controller('PostCtrl', {$scope: $scope});
+    }));
 
-        var result = mockUserResource
-
-
-      
-
+    it('should have a loadPosts method', function () {
+      expect($scope.loadPosts).toBeDefined();
+    });
   });
 
 });

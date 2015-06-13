@@ -10,7 +10,8 @@ module.exports = function(config){
       '/media/work/src/js/angular-mocks.js',
       'js/app.js',
       'js/post/post.js',
-      'js/post/post.controller.js',
+      'js/post/apiService.js',
+      'js/post/controller.js',
       'js/test/*_tests.js',
     ],
 
