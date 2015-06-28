@@ -10,11 +10,18 @@ angular
 
   .directive('postList', postList)
 
-  .filter('nlToArray', function() {
-    return function (body) {
-      return body.split('\n');
+  .filter('trusted', ['$sce', function($sce) {
+    return function (text) {
+      return $sce.trustAsHtml(text);
     };
-  });
+  }]);
+
+  //.filter('nlToArray', function() {
+    //return function (body) {
+      //return body.split('\n');
+    //};
+  //});
+
 
 function postList() {
   return {
@@ -30,7 +37,12 @@ function postList() {
 
 function PostCtrl($scope, postApiService) {
   $scope.loadPosts = function() {
+    var converter = new showdown.Converter();
     return postApiService.query(function (data) {
+      // Markdown
+      for (var i = 0; i < data.length; i++) {
+        data[i].body = converter.makeHtml(data[i].body);  
+      }
       $scope.posts = data;
     });
   };
