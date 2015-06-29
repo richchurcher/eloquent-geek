@@ -1,3 +1,9 @@
 .error {
   color: red;
 }
+
+/* no longer in Skeleton, required for large images */
+img.scale-with-grid {
+  max-width: 100%;
+  height: auto;
+}

@@ -131,11 +131,11 @@ func PostUpdate(w http.ResponseWriter, r *http.Request, c appengine.Context, url
 
 func PostDelete(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId string) *egerror.Error {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	id, err := strconv.ParseInt(urlId, 10, 64)
-	if err != nil {
-		// Malformed URL. Most requests should never reach this point.
-		return &egerror.Error{err, "Malformed URL.", http.StatusInternalServerError}
-	}
+	//id, err := strconv.ParseInt(urlId, 10, 64)
+	//if err != nil {
+	//// Malformed URL. Most requests should never reach this point.
+	//return &egerror.Error{err, "Malformed URL.", http.StatusInternalServerError}
+	//}
 
 	//if err := Delete(c, id); err != nil {
 	//return &egerror.Error{err, "Unable to delete post.", http.StatusInternalServerError}

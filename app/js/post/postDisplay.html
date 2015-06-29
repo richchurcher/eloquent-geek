@@ -1,8 +1,6 @@
 <section id="post" ng-repeat="post in vm.posts">
 <div id="{{post.id}}" class="post-container row">
-  <div id="image" class="one-half column">
-    {{post.image}}
-  </div>
+  <div id="image" class="one-half column"><img ng-show="post.image" class="scale-with-grid" src="images/{{post.image}}"></div>
   <div id="text" class="one-half column">
     <h2>{{post.title}}</h2>
     <div class="post-body" ng-bind-html="post.body | trusted">{{post.body}}</div>
