@@ -1,8 +1,13 @@
-<section id="post-list" ng-repeat="post in vm.posts">
-<div id="{{post.id}}" class="post">
+<section id="post" ng-repeat="post in vm.posts">
+<div id="{{post.id}}" class="post-container row">
+  <div id="image" class="one-half column">
+    {{post.image}}
+  </div>
+  <div id="text" class="one-half column">
     <h2>{{post.title}}</h2>
     <div class="post-body" ng-bind-html="post.body | trusted">{{post.body}}</div>
     Tags: <em ng-repeat="tag in post.tags">{{tag}} </em><br>
     <em>{{post.created}}</em>
+  </div>
 </div>
 </section>

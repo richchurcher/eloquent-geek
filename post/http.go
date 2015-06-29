@@ -90,7 +90,7 @@ func PostCreate(w http.ResponseWriter, r *http.Request, c appengine.Context, _ s
 	if err != nil {
 		return err.(*egerror.Error)
 	}
-	p.Save(c)
+	//p.Save(c)
 	w.WriteHeader(http.StatusCreated)
 	postEncode(w, *p)
 	return nil
@@ -117,9 +117,9 @@ func PostUpdate(w http.ResponseWriter, r *http.Request, c appengine.Context, url
 			return err.(*egerror.Error)
 		}
 		p.key = datastore.NewKey(c, "Post", "", id, nil)
-		if err := p.Save(c); err != nil {
-			return &egerror.Error{err, "Unable to save post.", http.StatusInternalServerError}
-		}
+		//if err := p.Save(c); err != nil {
+		//return &egerror.Error{err, "Unable to save post.", http.StatusInternalServerError}
+		//}
 
 		w.WriteHeader(http.StatusOK)
 		postEncode(w, *p)
@@ -137,9 +137,9 @@ func PostDelete(w http.ResponseWriter, r *http.Request, c appengine.Context, url
 		return &egerror.Error{err, "Malformed URL.", http.StatusInternalServerError}
 	}
 
-	if err := Delete(c, id); err != nil {
-		return &egerror.Error{err, "Unable to delete post.", http.StatusInternalServerError}
-	}
+	//if err := Delete(c, id); err != nil {
+	//return &egerror.Error{err, "Unable to delete post.", http.StatusInternalServerError}
+	//}
 
 	w.WriteHeader(http.StatusNoContent)
 	return nil
