@@ -1,8 +1,7 @@
 angular
 
-  .module("eg", [
-    "post",
-    "style"
+  .module('eg', [
+    'post',
   ])
 
   .config([
@@ -12,12 +11,8 @@ angular
     }
   ])
 
-  .factory('State', [StateFactory]);
-
-function StateFactory() {
-  var state = {
-    style: "layout.css",
-  }
-
-  return state;
-}
+  .controller('EGCtrl', ['$scope', function ($scope) {
+    $scope.style = {
+      css: 'wombat'
+    };
+  }]);

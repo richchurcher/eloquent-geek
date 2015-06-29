@@ -1,4 +1,4 @@
-<section id="post-list" ng-repeat="post in posts">
+<section id="post-list" ng-repeat="post in vm.posts">
 <div id="{{post.id}}" class="post">
     <h2>{{post.title}}</h2>
     <div class="post-body" ng-bind-html="post.body | trusted">{{post.body}}</div>

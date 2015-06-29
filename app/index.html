@@ -1,25 +1,28 @@
 <!DOCTYPE html>
-<html ng-app="eg">
-  <head ng-controller="StyleCtrl">
+<html ng-app="eg" ng-controller="EGCtrl">
+  <head>
     <meta charset="utf-8">
     <title>EG</title>
     <meta name="description" content="Eloquent Geek">
     <meta name="author" content="Rich Churcher">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-resource.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-resource.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/showdown/1.1.0/showdown.min.js"></script>
     <script type="text/javascript" src="/js/all.js"></script>
 
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
-    <style-switcher></style-switcher>
+    <link rel="stylesheet" type="text/css" href="css/layout.css">
+    <style type="text/css">{{ style.css }}</style>
   </head>
 
   <body>
-  <div class="container twelve columns content" ng-controller="PostCtrl">
-    <post-list></post-list>
+  <div class="container">
+    <div class="twelve columns content">
+      <post-display style='style'></post-display>
+    </div>
   </div>
   </body>
 </html>
