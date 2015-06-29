@@ -11,6 +11,7 @@ gulp.task('js', function () {
       'js/app.js', 
       'js/**/*.module.js', 
       'js/**/*.controller.js',
+      'js/**/*.directive.js',
       'js/**/*.service.js'
     ])
     .pipe(sourcemaps.init())
