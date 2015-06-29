@@ -13,7 +13,7 @@ import (
 )
 
 var Router = mux.NewRouter()
-var subrouter = Router.PathPrefix("/post").Subrouter().StrictSlash(true)
+var subrouter = Router.PathPrefix("/posts").Subrouter().StrictSlash(true)
 
 func init() {
 	subrouter.Handle("/", API(post.PostIndex)).

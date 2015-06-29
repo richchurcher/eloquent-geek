@@ -8,5 +8,5 @@ angular
   ]);
 
 function postFactory(resource) {
-  return resource('/post/:postId');
+  return resource('/posts/:postId');
 }
