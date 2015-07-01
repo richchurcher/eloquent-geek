@@ -32,7 +32,6 @@ func postUnmarshal(w http.ResponseWriter, r *http.Request) (*Post, error) {
 	return &p, nil
 }
 
-// Add an ID field for export to JSON
 func postEncode(w http.ResponseWriter, p Post) *egerror.Error {
 	// Add exported ID field for JSON response
 	p.ID = p.GetID()
@@ -142,5 +141,22 @@ func PostDelete(w http.ResponseWriter, r *http.Request, c appengine.Context, url
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+	return nil
+}
+
+func PostLatest(w http.ResponseWriter, r *http.Request, c appengine.Context, _ string) *egerror.Error {
+	p, err := GetLatest(c)
+	if err != nil {
+		return &egerror.Error{err, "Error retrieving latest post", http.StatusInternalServerError}
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	if p == nil {
+		w.WriteHeader(http.StatusNoContent)
+	} else {
+		w.WriteHeader(http.StatusOK)
+		postEncode(w, *p)
+	}
+
 	return nil
 }

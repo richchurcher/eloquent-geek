@@ -1,7 +1,6 @@
 package post
 
 import (
-	"html/template"
 	"time"
 
 	"appengine"
@@ -79,6 +78,18 @@ func Delete(c appengine.Context, id int64) error {
 	return nil
 }
 
-func TrustedHTML(b []byte) template.HTML {
-	return template.HTML(b)
+func GetLatest(c appengine.Context) (*Post, error) {
+	var p []Post
+	q := datastore.NewQuery("Post").Order("-Created").Limit(1)
+	k, err := q.GetAll(c, &p)
+	if err != nil {
+		return nil, err
+	}
+	if len(p) == 1 {
+		p[0].key = k[0]
+		return &p[0], nil
+	}
+
+	// No error, but no posts either
+	return nil, nil
 }

@@ -19,17 +19,15 @@ function postDisplay($sce, postApiService) {
   var controller = function() {
     var vm = this;
 
-    vm.loadPost = function() {
+    vm.loadPost = function(id) {
       // Markdown
       var converter = new showdown.Converter();
 
       // TODO: temporary, fix for individual post display
-      return postApiService.query(function (data) {
-        if (data.length > 0) {
-          vm.post = data[data.length-1];
-          vm.post.body = converter.makeHtml(vm.post.body);  
-          vm.style.css = vm.post.style;
-        }
+      return postApiService.get({postId:id}, function (data) {
+        data.body = converter.makeHtml(data.body);
+        vm.post = data
+        vm.style.css = data.style;
       });
     };
     
@@ -60,7 +58,9 @@ function postDisplay($sce, postApiService) {
       });
     };
 
-    vm.loadPost();
+    if (!vm.post) {
+      vm.loadPost('latest');
+    }
   };
 
   return {

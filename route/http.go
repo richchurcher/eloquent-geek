@@ -31,6 +31,9 @@ func init() {
 	subrouter.Handle("/{id:[0-9]+}", API(post.PostDelete)).
 		Methods("DELETE").
 		Name("PostDelete")
+	subrouter.Handle("/latest", API(post.PostLatest)).
+		Methods("GET").
+		Name("PostLatest")
 }
 
 // Wrap API requests
