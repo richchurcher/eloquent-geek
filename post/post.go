@@ -78,9 +78,10 @@ func Delete(c appengine.Context, id int64) error {
 	return nil
 }
 
-func GetLatest(c appengine.Context) (*Post, error) {
+// For PostFirst and PostLatest
+func GetOne(c appengine.Context, order string) (*Post, error) {
 	var p []Post
-	q := datastore.NewQuery("Post").Order("-Created").Limit(1)
+	q := datastore.NewQuery("Post").Order(order).Limit(1)
 	k, err := q.GetAll(c, &p)
 	if err != nil {
 		return nil, err

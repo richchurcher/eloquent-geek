@@ -53,6 +53,17 @@ func sliceEncode(w http.ResponseWriter, p []Post) *egerror.Error {
 	return nil
 }
 
+func writeSingle(w http.ResponseWriter, p *Post) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	if p == nil {
+		// Request was ok, but no posts in datastore
+		w.WriteHeader(http.StatusNoContent)
+	} else {
+		w.WriteHeader(http.StatusOK)
+		postEncode(w, *p)
+	}
+}
+
 func PostIndex(w http.ResponseWriter, r *http.Request, c appengine.Context, _ string) *egerror.Error {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
@@ -77,9 +88,7 @@ func PostGet(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId 
 		return &egerror.Error{err, "Couldn't get that post.", http.StatusInternalServerError}
 	}
 
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
-	postEncode(w, *p)
+	writeSingle(w, p)
 	return nil
 }
 
@@ -144,19 +153,22 @@ func PostDelete(w http.ResponseWriter, r *http.Request, c appengine.Context, url
 	return nil
 }
 
+func PostFirst(w http.ResponseWriter, r *http.Request, c appengine.Context, _ string) *egerror.Error {
+	p, err := GetOne(c, "Created")
+	if err != nil {
+		return &egerror.Error{err, "Error retrieving first post", http.StatusInternalServerError}
+	}
+
+	writeSingle(w, p)
+	return nil
+}
+
 func PostLatest(w http.ResponseWriter, r *http.Request, c appengine.Context, _ string) *egerror.Error {
-	p, err := GetLatest(c)
+	p, err := GetOne(c, "-Created")
 	if err != nil {
 		return &egerror.Error{err, "Error retrieving latest post", http.StatusInternalServerError}
 	}
 
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	if p == nil {
-		w.WriteHeader(http.StatusNoContent)
-	} else {
-		w.WriteHeader(http.StatusOK)
-		postEncode(w, *p)
-	}
-
+	writeSingle(w, p)
 	return nil
 }

@@ -34,6 +34,9 @@ func init() {
 	subrouter.Handle("/latest", API(post.PostLatest)).
 		Methods("GET").
 		Name("PostLatest")
+	subrouter.Handle("/first", API(post.PostFirst)).
+		Methods("GET").
+		Name("PostFirst")
 }
 
 // Wrap API requests

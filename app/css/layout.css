@@ -7,3 +7,12 @@ img.scale-with-grid {
   max-width: 100%;
   height: auto;
 }
+
+nav {
+  text-align: left;
+}
+
+nav li {
+  display: inline-block;
+  list-style: none;
+}
