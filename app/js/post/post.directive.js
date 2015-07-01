@@ -16,58 +16,61 @@ angular
 
 function postDisplay($sce, postApiService) {
 
-  var PostCtrl = function() {
+  var controller = function() {
     var vm = this;
 
-    vm.loadPosts = function() {
+    vm.loadPost = function() {
+      // Markdown
       var converter = new showdown.Converter();
+
+      // TODO: temporary, fix for individual post display
       return postApiService.query(function (data) {
-        // Markdown
-        for (var i = 0; i < data.length; i++) {
-          data[i].body = converter.makeHtml(data[i].body);  
-          vm.style.css = data[i].style;
+        if (data.length > 0) {
+          vm.post = data[data.length-1];
+          vm.post.body = converter.makeHtml(vm.post.body);  
+          vm.style.css = vm.post.style;
         }
-        vm.posts = data;
       });
     };
     
-    vm.deletePost = function(id, i) {
-      return postApiService.delete({
-        postId: id,
-      }).$promise.then(function () {
-          vm.posts.splice(i, 1);
-      }, function (error) {
-          // TODO: handle error
-      });
-    };
+    //vm.deletePost = function(id, i) {
+      //return postApiService.delete({
+        //postId: id,
+      //}).$promise.then(function () {
+          //vm.posts.splice(i, 1);
+      //}, function (error) {
+          //// TODO: handle error
+      //});
+    //};
 
     vm.createPost = function(post) {
       if (!post.tags) post.tags = '';
       return postApiService.save({
         title: post.title,
         body: post.body,
+        style: post.style,
+        image: post.image,
         tags: post.tags.split(' '),
       }, function (response) {
         var converter = new showdown.Converter();
-        response.body = converter.makeHtml(
-          $sce.trustAsHtml(response.body)
-        );
+        response.body = converter.makeHtml(response.body);
+        $sce.trustAsHtml(response.body);
         vm.style.css = response.style;
-        vm.posts.push(response);
+        vm.post = response;
       });
     };
 
-    vm.loadPosts();
+    vm.loadPost();
   };
 
   return {
     bindToController: true,
-    controller: PostCtrl,
+    controller: controller,
     controllerAs: 'vm',
     scope: {
-      style: '=',
+      style: '='
     },
-    templateUrl: '/js/post/postDisplay.html',
+    templateUrl: '/js/post/postDisplay.html'
   };
 }
 
