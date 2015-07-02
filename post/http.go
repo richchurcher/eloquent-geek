@@ -56,8 +56,8 @@ func sliceEncode(w http.ResponseWriter, p []Post) *egerror.Error {
 func writeSingle(w http.ResponseWriter, p *Post) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	if p == nil {
-		// Request was ok, but no posts in datastore
-		w.WriteHeader(http.StatusNoContent)
+		// Request was ok, but no post in datastore
+		w.WriteHeader(http.StatusNotFound)
 	} else {
 		w.WriteHeader(http.StatusOK)
 		postEncode(w, *p)
@@ -170,5 +170,42 @@ func PostLatest(w http.ResponseWriter, r *http.Request, c appengine.Context, _ s
 	}
 
 	writeSingle(w, p)
+	return nil
+}
+
+func postAdjacent(w http.ResponseWriter, c appengine.Context, urlId string, op string) *egerror.Error {
+	id, err := strconv.ParseInt(urlId, 10, 64)
+	if err != nil {
+		return &egerror.Error{err, "Can't find that. Try again?", http.StatusInternalServerError}
+	}
+	p, err := GetByID(c, id)
+	if err != nil {
+		return &egerror.Error{err, "Error retrieving next post.", http.StatusInternalServerError}
+	}
+
+	adjacent, err := GetAdjacent(c, op, p.Created)
+	if err != nil {
+		return &egerror.Error{err, "Error retrieving next post.", http.StatusInternalServerError}
+	}
+
+	if adjacent != nil {
+		writeSingle(w, adjacent)
+	} else {
+		writeSingle(w, p)
+	}
+	return nil
+}
+
+func PostPrevious(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId string) *egerror.Error {
+	if err := postAdjacent(w, c, urlId, "<"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func PostNext(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId string) *egerror.Error {
+	if err := postAdjacent(w, c, urlId, ">"); err != nil {
+		return err
+	}
 	return nil
 }

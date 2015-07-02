@@ -19,15 +19,20 @@ function postDisplay($sce, postApiService) {
   var controller = function() {
     var vm = this;
 
-    vm.loadPost = function(id) {
+    vm.loadPost = function(id, nav) {
       // Markdown
       var converter = new showdown.Converter();
 
-      // TODO: temporary, fix for individual post display
-      return postApiService.get({postId:id}, function (data) {
-        data.body = converter.makeHtml(data.body);
-        vm.post = data
-        vm.style.css = data.style;
+      var params = { postId: id };
+      if (nav) {
+        params.nav = nav;
+      }
+      return postApiService.get(params, function (response) {
+        response.body = converter.makeHtml(response.body);
+        vm.post = response
+        vm.style.css = response.style;
+      }, function () {
+        // Error: could be a 404, no posts exist
       });
     };
     

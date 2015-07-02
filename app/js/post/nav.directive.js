@@ -16,14 +16,16 @@ function postNav() {
       scope.latestPost = function () {
         postCtrl.loadPost('latest');
       };
-      scope.previousPost = function () {
+      scope.previousPost = function (current) {
+        postCtrl.loadPost(current, 'previous');
       };
-      scope.nextPost = function () {
+      scope.nextPost = function (current) {
+        postCtrl.loadPost(current, 'next');
       };
     },
     require: '^postDisplay',
     scope: {
-      post: '='
+      id: '@'
     },
     templateUrl: '/js/post/postNav.html'
   };

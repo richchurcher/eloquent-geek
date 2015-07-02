@@ -94,3 +94,23 @@ func GetOne(c appengine.Context, order string) (*Post, error) {
 	// No error, but no posts either
 	return nil, nil
 }
+
+func GetAdjacent(c appengine.Context, op string, t time.Time) (*Post, error) {
+	var p []Post
+	// if op is <, need to change sort order
+	order := "Created"
+	if op == "<" {
+		order = "-" + order
+	}
+	q := datastore.NewQuery("Post").Filter("Created "+op, t).Order(order).Limit(1)
+	k, err := q.GetAll(c, &p)
+	if err != nil {
+		return nil, err
+	}
+	if len(p) == 1 {
+		p[0].key = k[0]
+		return &p[0], nil
+	}
+
+	return nil, nil
+}
