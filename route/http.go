@@ -22,15 +22,15 @@ func init() {
 	subrouter.Handle("/{id:[0-9]+}", API(post.PostGet)).
 		Methods("GET").
 		Name("PostGet")
-	subrouter.Handle("/{id:[0-9]+}", API(post.PostUpdate)).
-		Methods("PUT", "OPTIONS"). // NOTE: OPTIONS crucial here, allows preflight request
-		Name("PostUpdate")
-	subrouter.Handle("/", API(post.PostCreate)).
-		Methods("POST").
-		Name("PostCreate")
-	subrouter.Handle("/{id:[0-9]+}", API(post.PostDelete)).
-		Methods("DELETE").
-		Name("PostDelete")
+	//subrouter.Handle("/{id:[0-9]+}", API(post.PostUpdate)).
+	//Methods("PUT", "OPTIONS"). // NOTE: OPTIONS crucial here, allows preflight request
+	//Name("PostUpdate")
+	//subrouter.Handle("/", API(post.PostCreate)).
+	//Methods("POST").
+	//Name("PostCreate")
+	//subrouter.Handle("/{id:[0-9]+}", API(post.PostDelete)).
+	//Methods("DELETE").
+	//Name("PostDelete")
 	subrouter.Handle("/latest", API(post.PostLatest)).
 		Methods("GET").
 		Name("PostLatest")
