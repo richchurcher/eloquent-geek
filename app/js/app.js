@@ -13,6 +13,6 @@ angular
 
   .controller('EGCtrl', ['$scope', function ($scope) {
     $scope.style = {
-      css: 'wombat'
+      css: ''
     };
   }]);
