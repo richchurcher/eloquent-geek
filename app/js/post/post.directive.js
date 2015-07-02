@@ -29,7 +29,7 @@ function postDisplay($sce, postApiService) {
       }
       return postApiService.get(params, function (response) {
         response.body = converter.makeHtml(response.body);
-        vm.post = response
+        vm.post = response;
         vm.style.css = response.style;
       }, function () {
         // Error: could be a 404, no posts exist

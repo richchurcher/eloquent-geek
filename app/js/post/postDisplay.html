@@ -1,13 +1,13 @@
 <section id="post">
   <div id="{{vm.post.id}}" class="post-container row">
-    <div id="image" class="one-half column"><img ng-show="vm.post.image" class="scale-with-grid" ng-src="images/{{vm.post.image}}"></div>
+    <div id="image" class="one-half column"><img class="scale-with-grid" ng-src="images/{{vm.post.image}}" err-src="images/placeholder.png"></div>
     <div id="text" class="one-half column">
       <post-nav></post-nav>
       <h2>{{vm.post.title}}</h2>
       <div class="post-body" ng-bind-html="vm.post.body | trusted">{{vm.post.body}}</div>
       Tags: <em ng-repeat="tag in vm.post.tags">{{tag}} </em><br>
       <em>{{vm.post.created}}</em>
+      <post-form></post-form>
     </div>
   </div>
-  <post-form></post-form>
 </section>
