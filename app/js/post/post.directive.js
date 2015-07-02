@@ -46,25 +46,34 @@ function postDisplay($sce, postApiService) {
       //});
     //};
 
-    vm.createPost = function(post) {
-      if (!post.tags) post.tags = '';
+    vm.createPost = function() {
+      if (!vm.post.tags) vm.post.tags = '';
       return postApiService.save({
-        title: post.title,
-        body: post.body,
-        style: post.style,
-        image: post.image,
-        tags: post.tags.split(' '),
+        title: vm.post.title,
+        body: vm.post.body,
+        style: vm.post.style,
+        image: vm.post.image,
+        tags: vm.post.tags.split(' '),
       }, function (response) {
         var converter = new showdown.Converter();
         response.body = converter.makeHtml(response.body);
         $sce.trustAsHtml(response.body);
         vm.style.css = response.style;
         vm.post = response;
+        vm.showCreateForm = false;
       });
     };
 
     if (!vm.post) {
       vm.loadPost('latest');
+    }
+
+    vm.newPost = function () {
+      for (var k in vm.post) {
+        vm.post[k] = null;
+      }
+      vm.showCreateForm = true;
+      vm.style.css = '';
     }
   };
 

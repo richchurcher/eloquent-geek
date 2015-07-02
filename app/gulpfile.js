@@ -16,7 +16,7 @@ gulp.task('js', function () {
     ])
     .pipe(sourcemaps.init())
       .pipe(concat('js/all.js'))
-      .pipe(stripDebug())
+      //.pipe(stripDebug())
       .pipe(ngAnnotate())
       .pipe(uglify(true))
     .pipe(sourcemaps.write())

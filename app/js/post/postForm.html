@@ -1,13 +1,14 @@
-<form name="create" class="create">
+<form name="create" class="create" ng-show="vm.showCreateForm">
   <label for="title">Title<span class="error" ng-show="create.title.$error.required">*</span></label>
-  <input type="text" class="u-full-width" name="title" ng-model="post.title" placeholder="Title" required>
+  <input type="text" class="u-full-width" name="title" ng-model="vm.post.title" placeholder="Title" required>
   <label for="body">Body<span class="error" ng-show="create.body.$error.required">*</span></label>
-  <textarea class="u-full-width" name="body" style="height:15em;" ng-model="post.body" required></textarea>
+  <textarea class="u-full-width" name="body" style="height:15em;" ng-model="vm.post.body" required></textarea>
   <label for="style">Style</label>
-  <textarea class="u-full-width" name="style" style="height:15em;" ng-model="post.style"></textarea>
+  <textarea class="u-full-width" name="style" style="height:15em;" ng-model="vm.post.style"></textarea>
   <label for="image">Image</label>
-  <input type="text" class="u-full-width" name="image" ng-model="post.image" placeholder="wombat.jpg">
+  <input type="text" class="u-full-width" name="image" ng-model="vm.post.image" placeholder="wombat.jpg">
   <label for="tags">Tags</label>
-  <input type="text" class="u-full-width" name="tags" ng-model="post.tags" placeholder="one two three four">
-  <button class="button-primary" create-form ng-click="create(post)">Create</button>
+  <input type="text" class="u-full-width" name="tags" ng-model="vm.post.tags" placeholder="one two three four">
+  <button class="button-primary" create-form ng-click="vm.createPost()">Create</button>
 </form>
+</div>

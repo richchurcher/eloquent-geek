@@ -10,14 +10,12 @@ angular
 function postForm() {
   return {
     link: function (scope, element, attrs, postCtrl) {
-      scope.create = function (post) {
-        postCtrl.createPost(post);
+      scope.create = function () {
+        postCtrl.createPost();
       }
     },
     require: '^postDisplay',
-    scope: {
-      post: '='
-    },
+    scope: false,
     templateUrl: '/js/post/postForm.html'
   };
 }

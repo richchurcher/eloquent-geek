@@ -22,11 +22,12 @@ function postNav() {
       scope.nextPost = function (current) {
         postCtrl.loadPost(current, 'next');
       };
+      scope.newPost = function () {
+        postCtrl.newPost();
+      };
     },
     require: '^postDisplay',
-    scope: {
-      id: '@'
-    },
+    scope: false,
     templateUrl: '/js/post/postNav.html'
   };
 }
