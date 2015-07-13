@@ -3,6 +3,9 @@ version: 0-1
 runtime: go
 api_version: go1
 
+skip_files:
+- ^(.*/)?.*/node_modules/.*$
+
 handlers:
 - url: /css
   static_dir: css
