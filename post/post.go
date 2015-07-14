@@ -70,7 +70,7 @@ func All(c appengine.Context) (*[]Post, error) {
 	return &p, nil
 }
 
-func Delete(c appengine.Context, id int64) error {
+func DeleteById(c appengine.Context, id int64) error {
 	k := datastore.NewKey(c, "Post", "", id, nil)
 	if err := datastore.Delete(c, k); err != nil {
 		return err

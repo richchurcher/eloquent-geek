@@ -9,7 +9,7 @@ import (
 	"github.com/richchurcher/eloquent-geek/egerror"
 )
 
-func postUnmarshal(w http.ResponseWriter, r *http.Request) (*Post, error) {
+func unmarshal(w http.ResponseWriter, r *http.Request) (*Post, error) {
 	var p Post
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1049576))
 	if err != nil {
@@ -28,7 +28,7 @@ func postUnmarshal(w http.ResponseWriter, r *http.Request) (*Post, error) {
 	return &p, nil
 }
 
-func postEncode(w http.ResponseWriter, p Post) *egerror.Error {
+func encode(w http.ResponseWriter, p Post) *egerror.Error {
 	// Add exported ID field for JSON response
 	p.ID = p.GetID()
 
@@ -56,6 +56,6 @@ func writeSingle(w http.ResponseWriter, p *Post) {
 		w.WriteHeader(http.StatusNotFound)
 	} else {
 		w.WriteHeader(http.StatusOK)
-		postEncode(w, *p)
+		encode(w, *p)
 	}
 }

@@ -10,7 +10,7 @@ import (
 	"github.com/richchurcher/eloquent-geek/egerror"
 )
 
-func PostIndex(w http.ResponseWriter, r *http.Request, c appengine.Context, _ string) *egerror.Error {
+func Index(w http.ResponseWriter, r *http.Request, c appengine.Context, _ string) *egerror.Error {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 	posts, err := All(c)
@@ -22,7 +22,7 @@ func PostIndex(w http.ResponseWriter, r *http.Request, c appengine.Context, _ st
 	return nil
 }
 
-func PostGet(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId string) *egerror.Error {
+func Get(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId string) *egerror.Error {
 	id, err := strconv.ParseInt(urlId, 10, 64)
 	if err != nil {
 		// Malformed URL. Most requests should never reach this point (they will
@@ -38,19 +38,19 @@ func PostGet(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId 
 	return nil
 }
 
-func PostCreate(w http.ResponseWriter, r *http.Request, c appengine.Context, _ string) *egerror.Error {
+func Create(w http.ResponseWriter, r *http.Request, c appengine.Context, _ string) *egerror.Error {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	p, err := postUnmarshal(w, r)
+	p, err := unmarshal(w, r)
 	if err != nil {
 		return err.(*egerror.Error)
 	}
 	p.Save(c)
 	w.WriteHeader(http.StatusCreated)
-	postEncode(w, *p)
+	encode(w, *p)
 	return nil
 }
 
-func PostUpdate(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId string) *egerror.Error {
+func Update(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId string) *egerror.Error {
 	switch r.Method {
 	case "OPTIONS":
 		// Preflight request
@@ -66,7 +66,7 @@ func PostUpdate(w http.ResponseWriter, r *http.Request, c appengine.Context, url
 			return &egerror.Error{err, "Malformed URL.", http.StatusInternalServerError}
 		}
 
-		p, err := postUnmarshal(w, r)
+		p, err := unmarshal(w, r)
 		if err != nil {
 			return err.(*egerror.Error)
 		}
@@ -76,14 +76,14 @@ func PostUpdate(w http.ResponseWriter, r *http.Request, c appengine.Context, url
 		}
 
 		w.WriteHeader(http.StatusOK)
-		postEncode(w, *p)
+		encode(w, *p)
 		break
 	}
 
 	return nil
 }
 
-func PostDelete(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId string) *egerror.Error {
+func Delete(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId string) *egerror.Error {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	id, err := strconv.ParseInt(urlId, 10, 64)
 	if err != nil {
@@ -91,7 +91,7 @@ func PostDelete(w http.ResponseWriter, r *http.Request, c appengine.Context, url
 		return &egerror.Error{err, "Malformed URL.", http.StatusInternalServerError}
 	}
 
-	if err := Delete(c, id); err != nil {
+	if err := DeleteById(c, id); err != nil {
 		return &egerror.Error{err, "Unable to delete post.", http.StatusInternalServerError}
 	}
 
@@ -99,7 +99,7 @@ func PostDelete(w http.ResponseWriter, r *http.Request, c appengine.Context, url
 	return nil
 }
 
-func PostFirst(w http.ResponseWriter, r *http.Request, c appengine.Context, _ string) *egerror.Error {
+func First(w http.ResponseWriter, r *http.Request, c appengine.Context, _ string) *egerror.Error {
 	p, err := GetOne(c, "Created")
 	if err != nil {
 		return &egerror.Error{err, "Error retrieving first post", http.StatusInternalServerError}
@@ -109,7 +109,7 @@ func PostFirst(w http.ResponseWriter, r *http.Request, c appengine.Context, _ st
 	return nil
 }
 
-func PostLatest(w http.ResponseWriter, r *http.Request, c appengine.Context, _ string) *egerror.Error {
+func Latest(w http.ResponseWriter, r *http.Request, c appengine.Context, _ string) *egerror.Error {
 	p, err := GetOne(c, "-Created")
 	if err != nil {
 		return &egerror.Error{err, "Error retrieving latest post", http.StatusInternalServerError}
@@ -119,7 +119,7 @@ func PostLatest(w http.ResponseWriter, r *http.Request, c appengine.Context, _ s
 	return nil
 }
 
-func postAdjacent(w http.ResponseWriter, c appengine.Context, urlId string, op string) *egerror.Error {
+func adjacent(w http.ResponseWriter, c appengine.Context, urlId string, op string) *egerror.Error {
 	id, err := strconv.ParseInt(urlId, 10, 64)
 	if err != nil {
 		return &egerror.Error{err, "Can't find that. Try again?", http.StatusInternalServerError}
@@ -129,28 +129,28 @@ func postAdjacent(w http.ResponseWriter, c appengine.Context, urlId string, op s
 		return &egerror.Error{err, "Error retrieving next post.", http.StatusInternalServerError}
 	}
 
-	adjacent, err := GetAdjacent(c, op, p.Created)
+	adj, err := GetAdjacent(c, op, p.Created)
 	if err != nil {
 		return &egerror.Error{err, "Error retrieving next post.", http.StatusInternalServerError}
 	}
 
-	if adjacent != nil {
-		writeSingle(w, adjacent)
+	if adj != nil {
+		writeSingle(w, adj)
 	} else {
 		writeSingle(w, p)
 	}
 	return nil
 }
 
-func PostPrevious(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId string) *egerror.Error {
-	if err := postAdjacent(w, c, urlId, "<"); err != nil {
+func Prev(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId string) *egerror.Error {
+	if err := adjacent(w, c, urlId, "<"); err != nil {
 		return err
 	}
 	return nil
 }
 
-func PostNext(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId string) *egerror.Error {
-	if err := postAdjacent(w, c, urlId, ">"); err != nil {
+func Next(w http.ResponseWriter, r *http.Request, c appengine.Context, urlId string) *egerror.Error {
+	if err := adjacent(w, c, urlId, ">"); err != nil {
 		return err
 	}
 	return nil
