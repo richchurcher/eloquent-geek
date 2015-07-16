@@ -16,3 +16,51 @@ nav li {
   display: inline-block;
   list-style: none;
 }
+
+.button-detail {
+  display: none;
+}
+
+
+@media (min-width: 550px) {
+  #post-left {
+    position: fixed;
+    top: 40%;
+    left: 0px;
+  }
+
+  nav, nav li, nav button {
+    display: block;
+    margin:0;
+    padding:0;
+  }
+
+  #post-left button {
+    border-radius: 0px;
+    border-left-style: none;
+  }
+  
+  #post-right {
+    position: fixed;
+    top: 40%;
+    right: 0px;
+  }
+
+  #post-right button {
+    float: right;
+    clear: both;
+  }
+
+  #post-right button {
+    border-radius: 0px;
+    border-right-style: none;
+  }
+
+  nav button {
+    padding: 1em;
+  }
+
+  nav button:hover span.button-detail {
+    display: inline-block;
+  }
+}

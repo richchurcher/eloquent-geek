@@ -1,8 +1,12 @@
-<nav>
+<nav id="post-left">
   <ul>
     <li><button id="first-post" class="nav-button" ng-click="firstPost()">&lt;&lt;</button></li>
     <li><button id="previous-post" class="nav-button" ng-click="previousPost(vm.post.id)">&lt;</button></li>
-    <!--<li><button id="new-post" class="nav-button" ng-click="newPost()">New Post</button></li>-->
+  </ul>
+</nav>
+<nav id="post-right">
+  <ul>
+    <li><button id="new-post" class="nav-button" ng-click="newPost()">*</button></li>
     <li><button id="next-post" class="nav-button" ng-click="nextPost(vm.post.id)">&gt;</button></li>
     <li><button id="latest-post" class="nav-button" ng-click="latestPost()">&gt;&gt;</button></li>
   </ul>

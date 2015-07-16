@@ -16,33 +16,33 @@ var Router = mux.NewRouter()
 var subrouter = Router.PathPrefix("/posts").Subrouter().StrictSlash(true)
 
 func init() {
-	subrouter.Handle("/", API(post.PostIndex)).
+	subrouter.Handle("/", API(post.Index)).
 		Methods("GET").
-		Name("PostIndex")
-	subrouter.Handle("/{id:[0-9]+}", API(post.PostGet)).
+		Name("Index")
+	subrouter.Handle("/{id:[0-9]+}", API(post.Get)).
 		Methods("GET").
-		Name("PostGet")
-	//subrouter.Handle("/{id:[0-9]+}", API(post.PostUpdate)).
+		Name("Get")
+	//subrouter.Handle("/{id:[0-9]+}", API(post.Update)).
 	//Methods("PUT", "OPTIONS"). // NOTE: OPTIONS crucial here, allows preflight request
-	//Name("PostUpdate")
-	//subrouter.Handle("/", API(post.PostCreate)).
+	//Name("Update")
+	//subrouter.Handle("/", API(post.Create)).
 	//Methods("POST").
-	//Name("PostCreate")
-	//subrouter.Handle("/{id:[0-9]+}", API(post.PostDelete)).
+	//Name("Create")
+	//subrouter.Handle("/{id:[0-9]+}", API(post.Delete)).
 	//Methods("DELETE").
-	//Name("PostDelete")
-	subrouter.Handle("/latest", API(post.PostLatest)).
+	//Name("Delete")
+	subrouter.Handle("/latest", API(post.Latest)).
 		Methods("GET").
-		Name("PostLatest")
-	subrouter.Handle("/first", API(post.PostFirst)).
+		Name("Latest")
+	subrouter.Handle("/first", API(post.First)).
 		Methods("GET").
-		Name("PostFirst")
-	subrouter.Handle("/{id:[0-9]+}/previous", API(post.PostPrevious)).
+		Name("First")
+	subrouter.Handle("/{id:[0-9]+}/previous", API(post.Prev)).
 		Methods("GET").
-		Name("PostPrevious")
-	subrouter.Handle("/{id:[0-9]+}/next", API(post.PostNext)).
+		Name("Prev")
+	subrouter.Handle("/{id:[0-9]+}/next", API(post.Next)).
 		Methods("GET").
-		Name("PostNext")
+		Name("Next")
 }
 
 // Wrap API requests
