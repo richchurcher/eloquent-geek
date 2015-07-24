@@ -25,9 +25,9 @@ func init() {
 	//subrouter.Handle("/{id:[0-9]+}", API(post.Update)).
 	//Methods("PUT", "OPTIONS"). // NOTE: OPTIONS crucial here, allows preflight request
 	//Name("Update")
-	//subrouter.Handle("/", API(post.Create)).
-	//Methods("POST").
-	//Name("Create")
+	subrouter.Handle("/", API(post.Create)).
+		Methods("POST").
+		Name("Create")
 	//subrouter.Handle("/{id:[0-9]+}", API(post.Delete)).
 	//Methods("DELETE").
 	//Name("Delete")

@@ -12,7 +12,8 @@ gulp.task('js', function () {
       'js/**/*.module.js', 
       'js/**/*.controller.js',
       'js/**/*.directive.js',
-      'js/**/*.service.js'
+      'js/**/*.service.js',
+      'js/lib/prism.js'
     ])
     .pipe(sourcemaps.init())
       .pipe(concat('js/all.js'))
